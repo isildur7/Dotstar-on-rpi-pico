@@ -32,7 +32,7 @@ class DotstarMatrix:
         if int(brightness) > 31:
             print("brightness input out of bounds, set to highest value\n")
             self.brightness = 31
-        else if int(brightness) < 0:
+        elif int(brightness) < 0:
             print("brightness input out of bounds, set to zero\n")
             self.brightness = 0
         else:
@@ -58,8 +58,8 @@ class DotstarMatrix:
         self.led_ar[-1] = 0xFFFFFFFF
         
         # Look up table for spiral pattern
-        self.spiral = [36, 28, 27, 35, 43, 44, 45, 37, 29, 21, 20, 19, 18, 26, 34, 42, 50, 51, 52, 53, 54, 46, 38, 30, 22, 14, 13, 12, 11, 10, 9, 17, 25, 33, 41, 49, 57, 58, 59, 60, 61, 62, 63, 55, 47, 39, 31, 23, 15, 7, 6, 5, 4, 3, 2, 1, 0, 8, 16, 24, 32, 40, 48, 56]
-        
+        self.spiral = [37, 29, 28, 36, 44, 45, 46, 38, 30, 22, 21, 20, 19, 27, 35, 43, 51, 52, 53, 54, 55, 47, 39, 31, 23, 15, 14, 13, 12, 11, 10, 18, 26, 34, 42, 50, 58, 59, 60, 61, 62, 63, 64, 56, 48, 40, 32, 24, 16, 8, 7, 6, 5, 4, 3, 2, 1, 9, 17, 25, 33, 41, 49, 57]
+
     def __set_pattern(self):
         """
         private method, sends data from array to the actual matrix to set it
@@ -103,7 +103,7 @@ class DotstarMatrix:
         Set all the LEDs to given hex color
         """
         for i in range(1, 1+self.numLED):
-            led_ar[i] = int(color) << 8 | (0xe0 | self.brightness)
+            self.led_ar[i] = int(color) << 8 | (0xe0 | self.brightness)
         
         self.__set_pattern()
         return
@@ -113,7 +113,7 @@ class DotstarMatrix:
         turn all LEDs off
         """
         for i in range(1, 1+self.numLED):
-            led_ar[i] = 0x0 << 8 | (0xe0 | self.brightness)
+            self.led_ar[i] = 0x0 << 8 | (0xe0 | self.brightness)
         
         self.__set_pattern()
         return
@@ -155,7 +155,7 @@ class DotstarMatrix:
         self.__set_pattern()
         return
     
-     def fillHalf(self, color, side):
+    def fillHalf(self, color, side):
         """
         turn on half of the array with given color
         Arguments:
@@ -166,21 +166,21 @@ class DotstarMatrix:
         """
         if side == 'l':
             for i in range(32):
-                led_ar[i] = int(color) << 8 | (0xe0 | self.brightness)
+                self.led_ar[i+1] = int(color) << 8 | (0xe0 | self.brightness)
         
         elif side == 'r':
             for i in range(32):
-                led_ar[i+32] = int(color) << 8 | (0xe0 | self.brightness)
+                self.led_ar[i+33] = int(color) << 8 | (0xe0 | self.brightness)
         
         elif side == 't':
             for i in range(4):
                 for j in range(i,57+i,8):
-                    led_ar[j] = int(color) << 8 | (0xe0 | self.brightness)
+                    self.led_ar[j+1] = int(color) << 8 | (0xe0 | self.brightness)
         
         elif side == 'b':
             for i in range(4):
                 for j in range(i,57+i,8):
-                    led_ar[j+4] = int(color) << 8 | (0xe0 | self.brightness)      
+                    self.led_ar[j+5] = int(color) << 8 | (0xe0 | self.brightness)      
 
         else:
             raise IOError("wrong side parameter, choose either 'l','r','t','b'")
@@ -199,21 +199,21 @@ class DotstarMatrix:
         """
         if side == 'l':
             for i in range(24):
-                led_ar[i] = int(color) << 8 | (0xe0 | self.brightness)
+                self.led_ar[i+1] = int(color) << 8 | (0xe0 | self.brightness)
         
         elif side == 'r':
             for i in range(24):
-                led_ar[i+40] = int(color) << 8 | (0xe0 | self.brightness)
+                self.led_ar[i+41] = int(color) << 8 | (0xe0 | self.brightness)
         
         elif side == 't':
             for i in range(3):
                 for j in range(i,57+i,8):
-                    led_ar[j] = int(color) << 8 | (0xe0 | self.brightness)
+                    self.led_ar[j+1] = int(color) << 8 | (0xe0 | self.brightness)
         
         elif side == 'b':
             for i in range(3):
                 for j in range(i,57+i,8):
-                    led_ar[j+4] = int(color) << 8 | (0xe0 | self.brightness)      
+                    self.led_ar[j+6] = int(color) << 8 | (0xe0 | self.brightness)      
 
         else:
             raise IOError("wrong side parameter, choose either 'l','r','t','b'")
